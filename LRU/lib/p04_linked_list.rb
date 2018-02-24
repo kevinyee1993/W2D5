@@ -21,14 +21,22 @@ class Node
 end
 
 class LinkedList
-  attr_reader :first, :last
+  #attr_reader :first, :last
 
   def initialize
-    @first = Node.new(:first)
-    @last = Node.new(:last)
+    @head = Node.new
+    @tail = Node.new
 
-    @first.next = last
-    @last.prev = first
+    @head.next = @tail
+    @tail.prev = @head
+  end
+
+  def first
+    @head.next
+  end
+
+  def last
+    @tail.prev
   end
 
   def [](i)
@@ -37,25 +45,57 @@ class LinkedList
   end
 
   def empty?
-    @last.prev == @first
+    @tail.prev == @head
   end
 
-  def get(key)
+  def get(target)
+
+    element = get_node(target)
+
+    return element.val unless element.nil?
+    nil
+  end
+
+  def get_node(key)
+    element = self.first
+
+    until element.key == key
+      element = element.next
+      break if element.nil?
+    end
+
+    return element unless element.nil?
+    nil
   end
 
   def include?(key)
+    element = get_node(key)
+    return false if element.nil?
+    true
   end
 
   def append(key, val)
+    node = Node.new(key, val)
+    node.next = @tail
+    node.prev = @tail.prev
+    node.next.prev = node
+    node.prev.next = node
+
   end
 
-  def update(key, val)
+  def update(target, val)
+    element = get_node(target)
+
+    element.val = val unless element.nil?
   end
 
   def remove(key)
+    element = get_node(key)
+    element.remove unless element.nil?
+
   end
 
-  def each
+  def each(&prc)
   end
 
   # uncomment when you have `each` working and `Enumerable` included
@@ -63,6 +103,3 @@ class LinkedList
   #   inject([]) { |acc, link| acc << "[#{link.key}, #{link.val}]" }.join(", ")
   # end
 end
-
-a = LinkedList.new
-p a.empty?

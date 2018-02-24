@@ -40,7 +40,15 @@ class LinkedList
   end
 
   def [](i)
-    each_with_index { |link, j| return link if i == j }
+    counter = 0
+    answer = self.first
+
+    until counter == i
+      answer = answer.next
+      counter += 1
+    end
+
+    return answer unless answer.nil?
     nil
   end
 
@@ -96,6 +104,13 @@ class LinkedList
   end
 
   def each(&prc)
+    node = self.first
+
+    until node == @tail
+      prc.call(node)
+      node = node.next
+    end
+
   end
 
   # uncomment when you have `each` working and `Enumerable` included

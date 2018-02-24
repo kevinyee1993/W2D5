@@ -15,11 +15,20 @@ class Node
   def remove
     # optional but useful, connects previous link to next link
     # and removes self from list.
+    self.prev.next = self.next
+    self.next.prev = self.prev
   end
 end
 
 class LinkedList
+  attr_reader :first, :last
+
   def initialize
+    @first = Node.new(:first)
+    @last = Node.new(:last)
+
+    @first.next = last
+    @last.prev = first
   end
 
   def [](i)
@@ -27,13 +36,8 @@ class LinkedList
     nil
   end
 
-  def first
-  end
-
-  def last
-  end
-
   def empty?
+    @last.prev == @first
   end
 
   def get(key)
@@ -59,3 +63,6 @@ class LinkedList
   #   inject([]) { |acc, link| acc << "[#{link.key}, #{link.val}]" }.join(", ")
   # end
 end
+
+a = LinkedList.new
+p a.empty?
